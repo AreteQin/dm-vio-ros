@@ -1,0 +1,14 @@
+<launch>
+
+  <node name="IMU_publisher" pkg="dmvio_ros"
+          type="IMU_publisher.py"/>
+
+  <node name="D435_publisher" pkg="dmvio_ros"
+          type="D435_publisher"/>
+
+  <node name="dmvio_node" pkg="dmvio_ros"
+          type="dmvio_ros_node"/>
+
+<!--   <node type="rviz" name="rviz" pkg="rviz" args="-d $(find imu_preintegration_ros)/rviz/imu_visualisation.rviz" /> -->
+
+</launch>
