@@ -103,7 +103,16 @@ add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catk
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX "")
 
-set(DMVIO_LINKED_LIBRARIES boost_system cxsparse ${BOOST_THREAD_LIBRARY} ${LIBZIP_LIBRARY} ${Pangolin_LIBRARIES} ${OpenCV_LIBS} gtsam ${YAML_CPP_LIBRARIES} ${STACKTRACE_LIBRARIES})
+set(DMVIO_LINKED_LIBRARIES
+        boost_system cxsparse
+        ${BOOST_THREAD_LIBRARY}
+        ${LIBZIP_LIBRARY}
+#        ${Pangolin_LIBRARIES}
+        ${OpenCV_LIBS}
+        gtsam
+        ${YAML_CPP_LIBRARIES}
+        ${STACKTRACE_LIBRARIES}
+        )
 
 target_link_libraries(${PROJECT_NAME}_node
         ${DMVIO_LIBRARY}
