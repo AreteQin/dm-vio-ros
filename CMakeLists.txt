@@ -114,7 +114,7 @@ set(DMVIO_LINKED_LIBRARIES
         ${STACKTRACE_LIBRARIES}
         )
 
-target_link_libraries(${PROJECT_NAME}_node
+target_link_libraries(dmvio_node
         ${DMVIO_LIBRARY}
         ${DMVIO_LINKED_LIBRARIES}
         ${catkin_LIBRARIES}
