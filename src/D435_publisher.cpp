@@ -38,6 +38,7 @@ int main(int argc, char **argv) {
 //        cv::imshow("D435/color", color_cv);
 //        cv::waitKey(1);
 
+        std_msgs::Header().stamp = ros::Time::now();
         pub_color.publish(cv_bridge::CvImage(std_msgs::Header(), "mono8", color_cv).toImageMsg());
         ros::spinOnce();
     }
