@@ -192,10 +192,6 @@ void vidCb(const sensor_msgs::ImageConstPtr img) {
 }
 
 void imuCb(const sensor_msgs::ImuConstPtr imu) {
-    // print received imu data
-    std::cout << "imu: " << imu->linear_acceleration.x << " " << imu->linear_acceleration.y << " "
-              << imu->linear_acceleration.z << " " << imu->angular_velocity.x << " " << imu->angular_velocity.y << " "
-              << imu->angular_velocity.z << std::endl;
 
     std::vector<float> accData;
     accData.push_back(imu->linear_acceleration.x);

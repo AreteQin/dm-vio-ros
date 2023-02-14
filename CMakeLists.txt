@@ -21,8 +21,8 @@ find_package(Eigen3 REQUIRED)
 find_package(Boost COMPONENTS system thread filesystem chrono serialization date_time timer regex)
 find_package(GTSAM REQUIRED)
 find_package(yaml-cpp REQUIRED)
-#find_package(Sophus REQUIRED)
-#include_directories(${Sophus_INCLUDE_DIRS})
+find_package(Sophus REQUIRED)
+include_directories(${Sophus_INCLUDE_DIRS})
 
 #find_package(Pangolin 0.2 REQUIRED)
 find_package(OpenCV REQUIRED)
@@ -122,4 +122,15 @@ target_link_libraries(dmvio_node
         )
 
 add_executable(D435_publisher src/D435_publisher.cpp)
-target_link_libraries(D435_publisher ${OpenCV_LIBS} ${catkin_LIBRARIES} ${realsense2_LIBRARY})
+target_link_libraries(D435_publisher
+        ${OpenCV_LIBS}
+        ${catkin_LIBRARIES}
+        ${realsense2_LIBRARY}
+        )
+
+add_executable(sync_msgs_node src/sync_msgs.cpp)
+target_link_libraries(sync_msgs_node
+        ${catkin_LIBRARIES}
+        Sophus::Sophus
+        ${OpenCV_LIBRARIES}
+        )
