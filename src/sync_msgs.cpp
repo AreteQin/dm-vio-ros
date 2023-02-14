@@ -35,14 +35,14 @@ void SyncCallback(const sensor_msgs::ImuConstPtr &imu, const sensor_msgs::ImageC
 }
 
 int main(int argc, char **argv) {
-    ros::init(argc, argv, "pose_subscriber");
+    ros::init(argc, argv, "sync_msgs");
     ros::NodeHandle nh_sync_msg;
     message_filters::Subscriber<sensor_msgs::Imu> sub_imu;
     sub_imu.subscribe(nh_sync_msg, "qcar_imu/raw", 50);
 
     cv::namedWindow("D435/color");
     image_transport::ImageTransport it(nh_sync_msg);
-    image_transport::SubscriberFilter sub_color(it, "D435/color", 1);
+    image_transport::SubscriberFilter sub_color(it, "D435/color", 3);
 
     //将话题的数据进行同步
     message_filters::TimeSynchronizer<sensor_msgs::Imu, sensor_msgs::Image>
