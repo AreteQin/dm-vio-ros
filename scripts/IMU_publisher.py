@@ -3,12 +3,18 @@
 import rospy
 from sensor_msgs.msg import Imu
 from Quanser.product_QCar import QCar
+import pyrealsense2 as rs
 
 if __name__ == "__main__":
     rospy.init_node("IMU_publisher")
     pub = rospy.Publisher("qcar_imu/raw", Imu, queue_size=50)
     #pub = rospy.Publisher("/imu/data_raw", Imu, queue_size=10)
     my_car = QCar()
+
+    # Create a context object. This object owns the handles to all connected realsense devices
+    pipeline = rs.pipeline()
+    pipeline.start()
+
     while not rospy.is_shutdown():
         my_car.read_IMU()
         imu_msg = Imu()
@@ -22,4 +28,7 @@ if __name__ == "__main__":
         imu_msg.header.frame_id = "qcar_body"
         imu_msg.orientation_covariance[0] = -1 # set to -1 to indicate that orientation is not available
         pub.publish(imu_msg)
-    rospy.spin()
+
+        frames = pipeline.wait_for_frames()
+
+        rospy.spin()

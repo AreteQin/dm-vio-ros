@@ -26,11 +26,11 @@ void SyncCallback(const sensor_msgs::ImuConstPtr &imu, const sensor_msgs::ImageC
               << imu->angular_velocity.z << imu->linear_acceleration.x << " " << imu->linear_acceleration.y << " "
               << imu->linear_acceleration.z << std::endl;
     try {
-        cv::imshow("D435/color", cv_bridge::toCvShare(color, "bgr8")->image);
+        cv::imshow("D435/color", cv_bridge::toCvShare(color, "mono8")->image);
         cv::waitKey(1);
     }
     catch (cv_bridge::Exception &e) {
-        ROS_ERROR("Could not convert from '%s' to 'bgr8'.", color->encoding.c_str());
+        ROS_ERROR("Could not convert from '%s' to 'mono8'.", color->encoding.c_str());
     }
 }
 
