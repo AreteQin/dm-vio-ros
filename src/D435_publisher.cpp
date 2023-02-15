@@ -39,6 +39,7 @@ int main(int argc, char **argv) {
 //        cv::waitKey(1);
 
         sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "mono8", color_cv).toImageMsg();
+        msg->header.stamp = ros::Time::now();
         pub_color.publish(msg);
         ros::spinOnce();
     }

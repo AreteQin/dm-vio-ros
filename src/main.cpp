@@ -266,6 +266,8 @@ int main(int argc, char **argv) {
 
 //    boost::thread runThread = boost::thread(boost::bind(run, viewer.get()));
 
+//    ros::Subscriber imageSub = nh.subscribe("cam0/image_raw", 3, &vidCb);
+//    ros::Subscriber imuSub = nh.subscribe("imu0", 50, &imuCb);
     ros::Subscriber imageSub = nh.subscribe("D435/color", 3, &vidCb);
     ros::Subscriber imuSub = nh.subscribe("qcar_imu/raw", 50, &imuCb);
 
