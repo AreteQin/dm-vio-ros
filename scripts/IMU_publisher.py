@@ -31,4 +31,4 @@ if __name__ == "__main__":
 
         # frames = pipeline.wait_for_frames()
 
-        rospy.spinOnce()
+    rospy.spin()
