@@ -8,6 +8,8 @@ IF (NOT CMAKE_BUILD_TYPE)
 ENDIF ()
 set(BUILD_TYPE RelWithDebInfo)
 
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
+
 find_package(catkin REQUIRED COMPONENTS
         cv_bridge
         geometry_msgs
@@ -23,6 +25,8 @@ find_package(GTSAM REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(Sophus REQUIRED)
 include_directories(${Sophus_INCLUDE_DIRS})
+find_package(Glog REQUIRED)
+include_directories(${GLOG_INCLUDE_DIRS})
 
 #find_package(Pangolin 0.2 REQUIRED)
 find_package(OpenCV REQUIRED)
@@ -95,7 +99,10 @@ ENDIF ()
 
 add_executable(dmvio_node src/main.cpp src/ROSOutputWrapper.cpp)
 
-add_dependencies(dmvio_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(dmvio_node
+        ${${PROJECT_NAME}_EXPORTED_TARGETS}
+        ${catkin_EXPORTED_TARGETS}
+        )
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -107,7 +114,7 @@ set(DMVIO_LINKED_LIBRARIES
         boost_system cxsparse
         ${BOOST_THREAD_LIBRARY}
         ${LIBZIP_LIBRARY}
-#        ${Pangolin_LIBRARIES}
+        #        ${Pangolin_LIBRARIES}
         ${OpenCV_LIBS}
         gtsam
         ${YAML_CPP_LIBRARIES}
@@ -118,6 +125,7 @@ target_link_libraries(dmvio_node
         ${DMVIO_LIBRARY}
         ${DMVIO_LINKED_LIBRARIES}
         ${catkin_LIBRARIES}
+        ${GLOG_LIBRARIES}
         #        Sophus::Sophus
         )
 

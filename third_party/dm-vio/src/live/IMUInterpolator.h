@@ -121,7 +121,7 @@ private:
     std::deque<Frame> imagesInProcess;
 
     // Maximum number of IMU measurements stored in accData/gyrData before IMU interpolation.
-    static constexpr int maxIMUQueueSize = 25;
+    static constexpr int maxIMUQueueSize = 100000;
 };
 }
 

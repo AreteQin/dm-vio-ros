@@ -24,6 +24,7 @@
 * along with DM-VIO. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <glog/logging.h>
 #include <ros/ros.h>
 #include <sensor_msgs/image_encodings.h>
 #include <sensor_msgs/Image.h>
@@ -174,6 +175,7 @@ double convertStamp(const ros::Time &time) {
 
 void vidCb(const sensor_msgs::ImageConstPtr img) {
     double stamp = convertStamp(img->header.stamp);
+    LOG(INFO) << "Got image at: " << stamp;
 
     cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(img, sensor_msgs::image_encodings::MONO8);
     assert(cv_ptr->image.type() == CV_8U);
@@ -207,6 +209,7 @@ void imuCb(const sensor_msgs::ImuConstPtr imu) {
     double timestamp = convertStamp(time);
     imuInt.addAccData(accData, timestamp);
     imuInt.addGyrData(gyrData, timestamp);
+    LOG(INFO) << "IMU data received at " << timestamp;
 }
 
 int main(int argc, char **argv) {
