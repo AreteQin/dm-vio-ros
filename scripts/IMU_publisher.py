@@ -12,7 +12,7 @@ if __name__ == "__main__":
     my_car = QCar()
 
     # Create a context object. This object owns the handles to all connected realsense devices
-    # pipeline = rs.pipeline()
+    pipeline = rs.pipeline()
     # pipeline.start()
 
     while not rospy.is_shutdown():
