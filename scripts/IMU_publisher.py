@@ -4,6 +4,8 @@ import rospy
 from sensor_msgs.msg import Imu
 from Quanser.product_QCar import QCar
 import pyrealsense2 as rs
+import cv2
+import numpy as np
 
 if __name__ == "__main__":
     rospy.init_node("IMU_publisher")
@@ -13,7 +15,10 @@ if __name__ == "__main__":
 
     # Create a context object. This object owns the handles to all connected realsense devices
     pipeline = rs.pipeline()
-    # pipeline.start()
+    # Configure streams
+    config = rs.config()
+    config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+    pipeline.start(config)
 
     while not rospy.is_shutdown():
         my_car.read_IMU()
@@ -29,6 +34,16 @@ if __name__ == "__main__":
         imu_msg.orientation_covariance[0] = -1 # set to -1 to indicate that orientation is not available
         pub.publish(imu_msg)
 
-        # frames = pipeline.wait_for_frames()
+        frames = pipeline.wait_for_frames()
+        color_frame = frames.get_color_frame()
+        if not color_frame:
+            continue
+
+        color_image = np.asanyarray(color_frame.get_data())
+
+        # Show images
+        cv2.namedWindow('RealSense', cv2.WINDOW_AUTOSIZE)
+        cv2.imshow('RealSense', color_image)
+        cv2.waitKey(1)
 
     rospy.spin()
