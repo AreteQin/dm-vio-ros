@@ -12,8 +12,8 @@ if __name__ == "__main__":
     my_car = QCar()
 
     # Create a context object. This object owns the handles to all connected realsense devices
-    pipeline = rs.pipeline()
-    pipeline.start()
+    # pipeline = rs.pipeline()
+    # pipeline.start()
 
     while not rospy.is_shutdown():
         my_car.read_IMU()
@@ -31,4 +31,4 @@ if __name__ == "__main__":
 
         # frames = pipeline.wait_for_frames()
 
-        rospy.spin()
+        rospy.spinOnce()
