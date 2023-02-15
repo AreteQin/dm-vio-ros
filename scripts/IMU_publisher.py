@@ -29,6 +29,6 @@ if __name__ == "__main__":
         imu_msg.orientation_covariance[0] = -1 # set to -1 to indicate that orientation is not available
         pub.publish(imu_msg)
 
-        frames = pipeline.wait_for_frames()
+        # frames = pipeline.wait_for_frames()
 
         rospy.spin()
