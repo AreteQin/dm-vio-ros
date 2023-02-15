@@ -3,9 +3,9 @@
 import rospy
 from sensor_msgs.msg import Imu
 from Quanser.product_QCar import QCar
-import pyrealsense2 as rs
-import cv2
-import numpy as np
+# import pyrealsense2 as rs
+# import cv2
+# import numpy as np
 
 if __name__ == "__main__":
     rospy.init_node("IMU_publisher")

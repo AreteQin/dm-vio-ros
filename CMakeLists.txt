@@ -136,9 +136,9 @@ target_link_libraries(D435_publisher
         ${realsense2_LIBRARY}
         )
 
-add_executable(sync_msgs_node src/sync_msgs.cpp)
-target_link_libraries(sync_msgs_node
-        ${catkin_LIBRARIES}
-        Sophus::Sophus
-        ${OpenCV_LIBRARIES}
-        )
+#add_executable(sync_msgs_node src/sync_msgs.cpp)
+#target_link_libraries(sync_msgs_node
+#        ${catkin_LIBRARIES}
+#        Sophus::Sophus
+#        ${OpenCV_LIBRARIES}
+#        )
