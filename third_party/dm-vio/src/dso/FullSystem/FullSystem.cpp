@@ -45,6 +45,7 @@
 #include "FullSystem/PixelSelector2.h"
 #include "FullSystem/ResidualProjections.h"
 #include "FullSystem/ImmaturePoint.h"
+#include <glog/logging.h>
 
 #include "FullSystem/CoarseTracker.h"
 #include "FullSystem/CoarseInitializer.h"
@@ -246,33 +247,30 @@ namespace dso {
         Hcalib.B[255] = 255;
     }
 
-    Sophus::SE3d FullSystem::PublishPose(bool onlyLogKFPoses, bool saveMetricPoses, bool useCamToTrackingRef) {
+    Sophus::SE3d FullSystem::PublishPose(bool onlyLogKFPoses, bool saveMetricPoses) {
         boost::unique_lock<boost::mutex> lock(trackMutex);
         boost::unique_lock<boost::mutex> crlock(shellPoseMutex);
 
-        for (FrameShell *s: allFrameHistory) {
-            if (!s->poseValid) continue;
+        FrameShell *s = allFrameHistory.back();
 
-            if (onlyLogKFPoses && s->marginalizedAt == s->id) continue;
+        if (!s->poseValid) return {};
 
-            // firstPose is transformFirstToWorld. We actually want camToFirst here ->
-            Sophus::SE3d camToWorld = s->camToWorld;
+        if (onlyLogKFPoses && s->marginalizedAt == s->id) return {};
 
-            // Use camToTrackingReference for nonKFs and the updated camToWorld for KFs.
-            if (useCamToTrackingRef && s->keyframeId == -1) {
-                camToWorld = s->trackingRef->camToWorld * s->camToTrackingRef;
-            }
-            Sophus::SE3d camToFirst = firstPose.inverse() * camToWorld;
+        // firstPose is transformFirstToWorld. We actually want camToFirst here ->
+        Sophus::SE3d camToWorld = s->camToWorld;
 
-            if (saveMetricPoses) {
-                // Transform pose to IMU frame.
-                // not actually camToFirst any more...
-                camToFirst = Sophus::SE3d(
-                        imuIntegration.getTransformDSOToIMU().transformPose(camToWorld.inverse().matrix()));
-            }
+        Sophus::SE3d camToFirst = firstPose.inverse() * camToWorld;
 
-            return camToFirst;
+        if (saveMetricPoses) {
+            // Transform pose to IMU frame.
+            // not actually camToFirst any more...
+            camToFirst = Sophus::SE3d(
+                    imuIntegration.getTransformDSOToIMU().transformPose(camToWorld.inverse().matrix()));
         }
+
+        return camToFirst;
+
     }
 
     void

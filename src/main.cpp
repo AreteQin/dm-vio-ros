@@ -111,12 +111,6 @@ void run() {
     ros::init(argc, argv, "dmvio");
     ros::NodeHandle nh;
     tf2_ros::TransformBroadcaster pose_br;
-//    ros::Publisher pub_quaternion = nh.advertise<geometry_msgs::QuaternionStamped>("D435/pose/quaternion",
-//                                                                                   1);
-//    geometry_msgs::QuaternionStamped msg_quaternion;
-//    ros::Publisher pub_translation = nh.advertise<geometry_msgs::PointStamped>("D435/pose/translation",
-//                                                                               1);
-//    geometry_msgs::PointStamped msg_translation;
     geometry_msgs::TransformStamped msg_transform_IMU;
 
     while (!stopSystem) {
@@ -164,26 +158,29 @@ void run() {
             break;
         }
 
+        Sophus::SE3d current_position = fullSystem->PublishPose(false, false);
+        if (current_position.data() != nullptr){
+            Eigen::Quaterniond q(current_position.unit_quaternion());
+            msg_transform_IMU.header.stamp = ros::Time::now();
+            msg_transform_IMU.header.frame_id = "map";
+            msg_transform_IMU.child_frame_id = "qcar";
+            msg_transform_IMU.transform.translation.x = current_position.translation()[0];
+            msg_transform_IMU.transform.translation.y = current_position.translation()[1];
+            msg_transform_IMU.transform.translation.z = current_position.translation()[2];
+            msg_transform_IMU.transform.rotation.x = q.x();
+            msg_transform_IMU.transform.rotation.y = q.y();
+            msg_transform_IMU.transform.rotation.z = q.z();
+            msg_transform_IMU.transform.rotation.w = q.w();
+            pose_br.sendTransform(msg_transform_IMU);
+            ros::spinOnce();
+        }
         ++ii;
 
     }
 
     fullSystem->blockUntilMappingIsFinished();
 
-//    fullSystem->printResult(imuSettings.resultsPrefix + "result.txt", false, false, true);
-    Sophus::SE3d current_position = fullSystem->PublishPose(false, false, true);
-    Eigen::Quaterniond q(current_position.unit_quaternion());
-    msg_transform_IMU.header.stamp = ros::Time::now();
-    msg_transform_IMU.header.frame_id = "map";
-    msg_transform_IMU.child_frame_id = "qcar";
-    msg_transform_IMU.transform.translation.x = current_position.translation()[0];
-    msg_transform_IMU.transform.translation.y = current_position.translation()[1];
-    msg_transform_IMU.transform.translation.z = current_position.translation()[2];
-    msg_transform_IMU.transform.rotation.x = q.x();
-    msg_transform_IMU.transform.rotation.y = q.y();
-    msg_transform_IMU.transform.rotation.z = q.z();
-    msg_transform_IMU.transform.rotation.w = q.w();
-    pose_br.sendTransform(msg_transform_IMU);
+    fullSystem->printResult(imuSettings.resultsPrefix + "result.txt", false, false, true);
 
     dmvio::TimeMeasurement::saveResults(imuSettings.resultsPrefix + "timings.txt");
 
@@ -298,13 +295,12 @@ int main(int argc, char **argv) {
     boost::thread runThread = boost::thread([] { return run(); });
 
 
-//    ros::Subscriber imageSub = nh.subscribe("cam0/image_raw", 3, &vidCb);
-//    ros::Subscriber imuSub = nh.subscribe("imu0", 50, &imuCb);
-    Eigen::Matrix3d *latest_position;
+    ros::Subscriber imageSub = nh.subscribe("cam0/image_raw", 3, &vidCb);
+    ros::Subscriber imuSub = nh.subscribe("imu0", 50, &imuCb);
 //    ros::Subscriber imageSub = nh.subscribe<sensor_msgs::Image>("D435/color", 3,
 //                                                                      boost::bind(&vidCb, _1, latest_position));
-    ros::Subscriber imageSub = nh.subscribe("D435/color", 3, &vidCb);
-    ros::Subscriber imuSub = nh.subscribe("qcar_imu/raw", 50, &imuCb);
+//    ros::Subscriber imageSub = nh.subscribe("D435/color", 3, &vidCb);
+//    ros::Subscriber imuSub = nh.subscribe("qcar_imu/raw", 50, &imuCb);
 
     ros::spin();
     stopSystem = true;
