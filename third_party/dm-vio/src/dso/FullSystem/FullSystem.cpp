@@ -1409,7 +1409,7 @@ namespace dso {
         }
 
 
-        debugPlot("post Optimize");
+//        debugPlot("post Optimize");
 
 
         for (auto *ow: outputWrapper) {
