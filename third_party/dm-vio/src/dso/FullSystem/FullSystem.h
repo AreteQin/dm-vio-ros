@@ -177,7 +177,7 @@ private:
 public:
 	dmvio::IMUIntegration &getImuIntegration();
 
-	Sophus::SE3 firstPose; // contains transform from first to world.
+	Sophus::SE3d firstPose; // contains transform from first to world.
 
 private:
 	CalibHessian Hcalib;

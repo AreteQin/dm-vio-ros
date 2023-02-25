@@ -251,11 +251,13 @@ namespace dso {
         boost::unique_lock<boost::mutex> lock(trackMutex);
         boost::unique_lock<boost::mutex> crlock(shellPoseMutex);
 
+        if (allFrameHistory.empty()) return Sophus::SE3d{};
+
         FrameShell *s = allFrameHistory.back();
 
-        if (!s->poseValid) return {};
+        if (!s->poseValid) return Sophus::SE3d{};
 
-        if (onlyLogKFPoses && s->marginalizedAt == s->id) return {};
+        if (onlyLogKFPoses && s->marginalizedAt == s->id) return Sophus::SE3d{};
 
         // firstPose is transformFirstToWorld. We actually want camToFirst here ->
         Sophus::SE3d camToWorld = s->camToWorld;
@@ -1266,7 +1268,7 @@ namespace dso {
             }
             mappedFrameSignal.notify_all();
         }
-        printf("MAPPING FINISHED!\n");
+        LOG(INFO) << "MAPPING FINISHED!";
     }
 
     void FullSystem::blockUntilMappingIsFinished() {

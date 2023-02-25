@@ -131,7 +131,7 @@ void run() {
 
         if (fullSystem->initFailed || setting_fullResetRequested) {
             if (ii - lastResetIndex < 250 || setting_fullResetRequested) {
-                printf("RESETTING!\n");
+                LOG(INFO)<<"Resetting in main.cpp!";
                 std::vector<IOWrap::Output3DWrapper *> wraps = fullSystem->outputWrapper;
                 fullSystem.reset();
                 for (IOWrap::Output3DWrapper *ow: wraps) ow->reset();
@@ -159,7 +159,7 @@ void run() {
         }
 
         Sophus::SE3d current_position = fullSystem->PublishPose(false, false);
-        if (current_position.data() != nullptr){
+        if (current_position.translation() != Sophus::SE3d{}.translation()){
             Eigen::Quaterniond q(current_position.unit_quaternion());
             msg_transform_IMU.header.stamp = ros::Time::now();
             msg_transform_IMU.header.frame_id = "map";

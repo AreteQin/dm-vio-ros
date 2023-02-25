@@ -30,6 +30,7 @@
 #include "IMUInitializerLogic.h"
 #include "IMUInitializerStates.h"
 #include "IMUInitializerTransitions.h"
+#include "glog/logging.h"
 
 dmvio::IMUInitializer::IMUInitializer(std::string resultsPrefix,
                                       boost::shared_ptr<gtsam::PreintegrationParams> preintegrationParams,
@@ -101,7 +102,7 @@ void dmvio::IMUInitializer::setState(std::unique_ptr<IMUInitializerState>&& newS
     {
         // Change state, the caller is responsible for making sure we have a lock.
         currentState = std::move(newState);
-        std::cout << "Switching to initializer state: " << *currentState << std::endl;
+        LOG(INFO) << "Switching to initializer state: " << *currentState;
     }
 }
 

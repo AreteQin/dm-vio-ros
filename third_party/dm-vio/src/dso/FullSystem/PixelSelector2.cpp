@@ -35,6 +35,7 @@
 #include "util/globalCalib.h"
 #include "FullSystem/HessianBlocks.h"
 #include "util/globalFuncs.h"
+#include "glog/logging.h"
 
 namespace dso
 {
@@ -60,7 +61,7 @@ PixelSelector::PixelSelector(int w, int h)
         assert(0);
     }
 
-    std::cout << "PixelSelector: Using block sizes: " << bW << ", " << bH << '\n';
+    LOG(INFO) << "PixelSelector: Using block sizes: " << bW << ", " << bH << '\n';
 
 	gradHist = new int[100*(1+nbW)*(1+nbH)];
 	ths = new float[(nbW)*(nbH)+100];
