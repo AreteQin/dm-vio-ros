@@ -20,10 +20,13 @@ find_package(catkin REQUIRED COMPONENTS
         tf2
         )
 
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
 find_package(Eigen3 REQUIRED)
 find_package(Boost COMPONENTS system thread filesystem chrono serialization date_time timer regex)
 find_package(GTSAM REQUIRED)
 find_package(yaml-cpp REQUIRED)
+find_package(Glog REQUIRED)
+include_directories(${GLOG_INCLUDE_DIRS})
 
 #find_package(Pangolin 0.2 REQUIRED)
 #add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/dm-vio/thirdparty/Pangolin)
