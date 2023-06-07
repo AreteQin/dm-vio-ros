@@ -30,7 +30,8 @@
 #include "boost/thread.hpp"
 #include <stdio.h>
 #include <iostream>
-#include "glog/logging.h"
+
+
 
 namespace dso
 {
@@ -70,7 +71,7 @@ public:
 			workerThreads[i].join();
 
 
-		LOG(INFO)<<"destroyed ThreadReduce\n";
+		printf("destroyed ThreadReduce\n");
 
 	}
 

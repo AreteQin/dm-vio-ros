@@ -31,6 +31,13 @@ ENDIF()
 # optional libraries
 find_package(LibZip QUIET)
 #find_package(Pangolin 0.2 QUIET)
+set(Pangolin_FOUND 1)
+add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/Pangolin)
+set(Pangolin_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/thirdparty/Pangolin/include
+		${PROJECT_SOURCE_DIR}/thirdparty/Pangolin/src)
+set(Pangolin_LIBRARIES pangolin)
+#set(Pangolin_LIBRARIES ${PROJECT_SOURCE_DIR}/thirdparty/Pangolin/build/src/libpangolin.so)
+
 find_package(OpenCV QUIET)
 
 
@@ -137,7 +144,8 @@ if (Pangolin_FOUND)
 	include_directories( ${Pangolin_INCLUDE_DIRS} ) 
 	set(dso_pangolin_SOURCE_FILES
 			${DSO_SOURCE_DIR}/IOWrapper/Pangolin/KeyFrameDisplay.cpp
-			${DSO_SOURCE_DIR}/IOWrapper/Pangolin/PangolinDSOViewer.cpp)
+			${DSO_SOURCE_DIR}/IOWrapper/Pangolin/PangolinDSOViewer.cpp
+			${DSO_SOURCE_DIR}/IOWrapper/Pangolin/FollowCamMode.cpp)
 	set(HAS_PANGOLIN 1)
 else ()
 	message("--- could not find PANGOLIN, not compiling with pangolin library.")

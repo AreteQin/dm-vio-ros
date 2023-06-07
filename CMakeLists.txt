@@ -8,14 +8,13 @@ IF (NOT CMAKE_BUILD_TYPE)
 ENDIF ()
 set(BUILD_TYPE RelWithDebInfo)
 
-list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
-
 find_package(catkin REQUIRED COMPONENTS
         cv_bridge
         geometry_msgs
         roscpp
         sensor_msgs
         message_generation
+        rosbag
         image_transport
         tf2_ros
         tf2
@@ -25,19 +24,22 @@ find_package(Eigen3 REQUIRED)
 find_package(Boost COMPONENTS system thread filesystem chrono serialization date_time timer regex)
 find_package(GTSAM REQUIRED)
 find_package(yaml-cpp REQUIRED)
-find_package(Sophus REQUIRED)
-include_directories(${Sophus_INCLUDE_DIRS})
-find_package(Glog REQUIRED)
-include_directories(${GLOG_INCLUDE_DIRS})
 
 #find_package(Pangolin 0.2 REQUIRED)
+#add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/dm-vio/thirdparty/Pangolin)
+set(Pangolin_FOUND 1)
+set(Pangolin_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/third_party/dm-vio/thirdparty/Pangolin/include
+        ${PROJECT_SOURCE_DIR}/third_party/dm-vio/thirdparty/Pangolin/src)
+set(Pangolin_LIBRARIES pangolin)
+#set(Pangolin_LIBRARIES ${PROJECT_SOURCE_DIR}/third_party/dm-vio/thirdparty/Pangolin/build/src/libpangolin.so)
+
 find_package(OpenCV REQUIRED)
 find_package(realsense2 REQUIRED)
 
 # IMPORTANT: For compiling this project you need to set the environment variable $DMVIO_BUILD
 # to point to the build folder of the main DM-VIO project.
 # We expect that the build folder is a direct subfolder of the DM-VIO project folder.
-add_subdirectory(third_party/dm-vio)
+add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/dm-vio)
 #set(DMVIO_BUILD $ENV{DMVIO_BUILD})
 #set(DMVIO_BUILD ${CMAKE_CURRENT_SOURCE_DIR}/third_party/dm-vio/build)
 include_directories(${PROJECT_SOURCE_DIR}/third_party/dm-vio/src
@@ -116,7 +118,7 @@ set(DMVIO_LINKED_LIBRARIES
         boost_system cxsparse
         ${BOOST_THREAD_LIBRARY}
         ${LIBZIP_LIBRARY}
-        #        ${Pangolin_LIBRARIES}
+        ${Pangolin_LIBRARIES}
         ${OpenCV_LIBS}
         gtsam
         ${YAML_CPP_LIBRARIES}

@@ -150,7 +150,6 @@ public:
 
 	float optimize(int mnumOptIts);
 
-    Sophus::SE3d PublishPose(bool onlyLogKFPoses, bool saveMetricPoses);
 	void printResult(std::string file, bool onlyLogKFPoses, bool saveMetricPoses, bool useCamToTrackingRef);
 
 	void debugPlot(std::string name);
@@ -177,7 +176,7 @@ private:
 public:
 	dmvio::IMUIntegration &getImuIntegration();
 
-	Sophus::SE3d firstPose; // contains transform from first to world.
+	Sophus::SE3 firstPose; // contains transform from first to world.
 
 private:
 	CalibHessian Hcalib;
@@ -338,8 +337,6 @@ private:
 
 
 	bool secondKeyframeDone;
-
-    void PublishPose(std::string file, bool onlyLogKFPoses, bool saveMetricPoses, bool useCamToTrackingRef);
 };
 }
 

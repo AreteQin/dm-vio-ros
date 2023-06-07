@@ -29,7 +29,6 @@
 #include "GTSAMIntegration/ExtUtils.h"
 #include "dso/util/FrameShell.h"
 #include "GTSAMIntegration/GTSAMUtils.h"
-#include "glog/logging.h"
 
 using namespace dmvio;
 using namespace gtsam;
@@ -202,7 +201,7 @@ dmvio::CoarseIMUInitOptimizer::OptimizationResult dmvio::CoarseIMUInitOptimizer:
        (settings.requestFullResetNormalizedErrorThreshold > 0 &&
         normalizedError > settings.requestFullResetNormalizedErrorThreshold))
     {
-        LOG(INFO) << "Large CoarseIMUInitializer error! Requesting full reset! " << normalizedError;
+        std::cout << "Large CoarseIMUInitializer error! Requesting full reset! " << normalizedError << std::endl;
         good = false;
         dso::setting_fullResetRequested = true;
     }
