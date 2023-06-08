@@ -150,6 +150,8 @@ public:
 
 	float optimize(int mnumOptIts);
 
+    Sophus::SE3d PublishPose(bool onlyLogKFPoses, bool saveMetricPoses);
+
 	void printResult(std::string file, bool onlyLogKFPoses, bool saveMetricPoses, bool useCamToTrackingRef);
 
 	void debugPlot(std::string name);

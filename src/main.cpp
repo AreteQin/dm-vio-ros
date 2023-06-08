@@ -493,7 +493,7 @@ std::unique_ptr<Undistort> undistorter;
 bool stopSystem = false;
 int start = 2;
 
-void run() {
+void run(IOWrap::PangolinDSOViewer* viewer) {
     bool linearizeOperation = false;
     auto fullSystem = std::make_unique<FullSystem>(linearizeOperation, imuCalibration, imuSettings);
 
@@ -506,10 +506,10 @@ void run() {
         fullSystem->setGammaFunction(undistorter->photometricUndist->getG());
     }
 
-//    if(viewer)
-//    {
-//        fullSystem->outputWrapper.push_back(viewer);
-//    }
+    if(viewer)
+    {
+        fullSystem->outputWrapper.push_back(viewer);
+    }
 
     dmvio::FrameSkippingStrategy frameSkipping(frameSkippingSettings);
     // frameSkipping registers as an outputWrapper to get notified of changes of the system status.
@@ -564,33 +564,33 @@ void run() {
             }
         }
 
-//        if(viewer != nullptr && viewer->shouldQuit())
-//        {
-//            std::cout << "User closed window -> Quit!" << std::endl;
-//            break;
-//        }
+        if(viewer != nullptr && viewer->shouldQuit())
+        {
+            std::cout << "User closed window -> Quit!" << std::endl;
+            break;
+        }
 
         if (fullSystem->isLost) {
             printf("LOST!!\n");
             break;
         }
 
-//        Sophus::SE3d current_position = fullSystem->PublishPose(false, false);
-//        if (current_position.translation() != Sophus::SE3d{}.translation()){
-//            Eigen::Quaterniond q(current_position.unit_quaternion());
-//            msg_transform_IMU.header.stamp = ros::Time::now();
-//            msg_transform_IMU.header.frame_id = "map";
-//            msg_transform_IMU.child_frame_id = "qcar";
-//            msg_transform_IMU.transform.translation.x = current_position.translation()[0];
-//            msg_transform_IMU.transform.translation.y = current_position.translation()[1];
-//            msg_transform_IMU.transform.translation.z = current_position.translation()[2];
-//            msg_transform_IMU.transform.rotation.x = q.x();
-//            msg_transform_IMU.transform.rotation.y = q.y();
-//            msg_transform_IMU.transform.rotation.z = q.z();
-//            msg_transform_IMU.transform.rotation.w = q.w();
-//            pose_br.sendTransform(msg_transform_IMU);
-//            ros::spinOnce();
-//        }
+        Sophus::SE3d current_position = fullSystem->PublishPose(false, false);
+        if (current_position.translation() != Sophus::SE3d{}.translation()){
+            Eigen::Quaterniond q(current_position.unit_quaternion());
+            msg_transform_IMU.header.stamp = ros::Time::now();
+            msg_transform_IMU.header.frame_id = "map";
+            msg_transform_IMU.child_frame_id = "qcar";
+            msg_transform_IMU.transform.translation.x = current_position.translation()[0];
+            msg_transform_IMU.transform.translation.y = current_position.translation()[1];
+            msg_transform_IMU.transform.translation.z = current_position.translation()[2];
+            msg_transform_IMU.transform.rotation.x = q.x();
+            msg_transform_IMU.transform.rotation.y = q.y();
+            msg_transform_IMU.transform.rotation.z = q.z();
+            msg_transform_IMU.transform.rotation.w = q.w();
+            pose_br.sendTransform(msg_transform_IMU);
+            ros::spinOnce();
+        }
         ++ii;
 
     }
@@ -701,16 +701,14 @@ int main(int argc, char **argv) {
 
     imuCalibration.loadFromFile(mainSettings.imuCalibFile);
 
-//    std::unique_ptr<IOWrap::PangolinDSOViewer> viewer;
+    std::unique_ptr<IOWrap::PangolinDSOViewer> viewer;
 
-//    if(!disableAllDisplay)
-//    {
-//        viewer = std::make_unique<IOWrap::PangolinDSOViewer>(wG[0], hG[0], true, settingsUtil, normalizeCamSize);
-//    }
+    if(!disableAllDisplay)
+    {
+        viewer = std::make_unique<IOWrap::PangolinDSOViewer>(wG[0], hG[0], true, settingsUtil, normalizeCamSize);
+    }
 
-//    boost::thread runThread = boost::thread(boost::bind(run, viewer.get()));
-    boost::thread runThread = boost::thread([] { return run(); });
-
+    boost::thread runThread = boost::thread(boost::bind(run, viewer.get()));
 
 //    ros::Subscriber imageSub = nh.subscribe("cam0/image_raw", 3, &vidCb);
 //    ros::Subscriber imuSub = nh.subscribe("imu0", 50, &imuCb);
