@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include <pangolin/config.h>
+//#include <pangolin/config.h>
 
 // Include portable printf-style format macros
 #define __STDC_FORMAT_MACROS
