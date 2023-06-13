@@ -32,9 +32,9 @@ ENDIF ()
 find_package(LibZip QUIET)
 #find_package(Pangolin 0.2 QUIET)
 set(Pangolin_FOUND 1)
-add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/dm-vio/thirdparty/Pangolin)
-set(Pangolin_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/third_party/dm-vio/thirdparty/Pangolin/include
-        ${PROJECT_SOURCE_DIR}/third_party/dm-vio/thirdparty/Pangolin/src)
+add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/Pangolin)
+set(Pangolin_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/thirdparty/Pangolin/include
+        ${PROJECT_SOURCE_DIR}/thirdparty/Pangolin/src)
 set(Pangolin_LIBRARIES pangolin)
 #set(Pangolin_LIBRARIES ${PROJECT_SOURCE_DIR}/thirdparty/Pangolin/build/src/libpangolin.so)
 
@@ -129,10 +129,10 @@ set(dmvio_SOURCE_FILES
 
 
 include_directories(
-        ${PROJECT_SOURCE_DIR}/third_party/dm-vio/src
-        ${PROJECT_SOURCE_DIR}/third_party/dm-vio/src/dso
-        ${PROJECT_SOURCE_DIR}/third_party/dm-vio/thirdparty/Sophus
-        ${PROJECT_SOURCE_DIR}/third_party/dm-vio/thirdparty/sse2neon
+        ${PROJECT_SOURCE_DIR}/src
+        ${PROJECT_SOURCE_DIR}/src/dso
+        ${PROJECT_SOURCE_DIR}/thirdparty/Sophus
+        ${PROJECT_SOURCE_DIR}/thirdparty/sse2neon
         ${EIGEN3_INCLUDE_DIR}
         ${GTSAM_INCLUDE_DIR}
 )
